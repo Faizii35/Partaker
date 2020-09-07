@@ -1,11 +1,11 @@
 package com.it.partaker
 
 class User (
-    private var id : String, private var fullName : String,
-    private var phoneNumber : String, private var city : String,
-    private var email : String, private var password : String,
-    private var gender : String, private var registerAs : String,
-    private var bloodGroup : String, private var profilePic : String
+    private var id : String = "", private var fullName : String = "",
+    private var phoneNumber : String = "", private var city : String = "",
+    private var email : String = "", private var password : String = "",
+    private var gender : String = "", private var registerAs : String = "",
+    private var bloodGroup : String = "", private var profilePic : String = ""
 )
 {
     //Default No Argument Constructor

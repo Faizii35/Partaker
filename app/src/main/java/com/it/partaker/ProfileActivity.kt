@@ -6,12 +6,14 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -39,6 +41,29 @@ class ProfileActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userReference = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser?.uid.toString())
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
+
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+        userRef.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()){
+                    val user = p0.getValue<User>(User::class.java)
+
+                    tvProfileFullNameFB.text = user!!.getFullName()
+                    tvProfilePhoneNumberFB.text = user!!.getPhoneNumber()
+                    tvProfileCityFB.text = user!!.getCity()
+                    tvProfileBloodGroupFB.text = user!!.getBloodGroup()
+                    tvProfileGenderFB.text = user!!.getGender()
+
+                    Glide.with(this@ProfileActivity)
+                        .load(user!!.getProfilePic())
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .transform(CircleCrop())
+                        .into(ivProfilePic)
+                }
+            }
+            override fun onCancelled(p0: DatabaseError) { TODO("Not yet implemented") }
+        })
 
         // Sign Out Button Click
         btnProfileSignOut.setOnClickListener {
@@ -73,41 +98,52 @@ class ProfileActivity : AppCompatActivity() {
 
         if(imageUri!= null) {
             val fileRef = storageRef!!.child(System.currentTimeMillis().toString() + ".jpg")
-            var uploadTask: StorageTask<*>
+            val uploadTask: StorageTask<*>
             uploadTask = fileRef.putFile(imageUri!!)
-            uploadTask.addOnCompleteListener {
-                if(it.isSuccessful)
-                {
-                    val downloadUrl = it.result
-                    val url = downloadUrl.toString()
 
-                    val mapProfilePic = HashMap<String, Any>()
-                    mapProfilePic["profilePic"] = url
-                    userReference!!.updateChildren(mapProfilePic)
-                    progressBar.hide()
+                uploadTask.addOnCompleteListener {
+                    if (it.isSuccessful) {
 
-                    val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                    val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    userRef.addValueEventListener(object: ValueEventListener{
-                        override fun onDataChange(p0: DataSnapshot) {
-                            if (p0.exists()){
-                                val user = p0.getValue<User>(User::class.java)
+                     //   val chkUrl = fileRef.downloadUrl.result.toString()
+                     //   Toast.makeText(this,"Check URL " + chkUrl, Toast.LENGTH_LONG).show()
+                        var url = it.result.toString()
 
-                                Glide.with(this@ProfileActivity)
-                                    .load(user!!.getProfilePic())
-                                    .placeholder(R.drawable.ic_launcher_background)
-                                    .transform(CircleCrop())
-                                    .into(ivProfilePic)
+                        val addOnCompleteListener = fileRef.downloadUrl.addOnCompleteListener { it1: Task<Uri> ->
+                            if (it1.isSuccessful)
+                            {
+                                url = it1.result.toString()
+                                val mapProfilePic = HashMap<String, Any>()
+                                mapProfilePic["profilePic"] = url
+                                userReference!!.updateChildren(mapProfilePic)
+                                progressBar.hide()
+                            }
+                        }
+
+
+
+                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                        val userRef =
+                            FirebaseDatabase.getInstance().reference.child("users").child(userId)
+                        userRef.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(p0: DataSnapshot) {
+                                if (p0.exists()) {
+                                    val user = p0.getValue<User>(User::class.java)
+
+                                    Glide.with(this@ProfileActivity)
+                                        .load(user!!.getProfilePic())
+                                        .placeholder(R.drawable.ic_launcher_background)
+                                        .transform(CircleCrop())
+                                        .into(ivProfilePic)
+                                }
+
                             }
 
-                        }
-
-                        override fun onCancelled(p0: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-                    })
+                            override fun onCancelled(p0: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+                    }
                 }
-            }
         }
     }
 }
