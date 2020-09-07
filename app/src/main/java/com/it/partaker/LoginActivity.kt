@@ -44,13 +44,8 @@ class LoginActivity : AppCompatActivity() {
                             intent.flags = FLAG_ACTIVITY_CLEAR_TOP
                             startActivity(intent)
                         }
-                        else
-                        {
-                            Toast.makeText(
-                                this,
-                                "Please Verify Your Email First!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        else {
+                            Toast.makeText(this,"Please Verify Your Email First!", Toast.LENGTH_SHORT).show()
                         } // End Else Is Verified Email
                     } // End If SignIn
                     else {
