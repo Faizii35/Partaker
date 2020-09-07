@@ -57,7 +57,7 @@ class ProfileActivity : AppCompatActivity() {
 
                     Glide.with(this@ProfileActivity)
                         .load(user!!.getProfilePic())
-                        .placeholder(R.drawable.ic_launcher_background)
+                        .placeholder(R.drawable.default_profile_pic)
                         .transform(CircleCrop())
                         .into(ivProfilePic)
                 }
@@ -101,52 +101,44 @@ class ProfileActivity : AppCompatActivity() {
             val uploadTask: StorageTask<*>
             uploadTask = fileRef.putFile(imageUri!!)
 
-                uploadTask.addOnCompleteListener {
-                    if (it.isSuccessful) {
+            uploadTask.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    var url = it.result.toString()
 
-                     //   val chkUrl = fileRef.downloadUrl.result.toString()
-                     //   Toast.makeText(this,"Check URL " + chkUrl, Toast.LENGTH_LONG).show()
-                        var url = it.result.toString()
-
-                        val addOnCompleteListener = fileRef.downloadUrl.addOnCompleteListener { it1: Task<Uri> ->
-                            if (it1.isSuccessful)
-                            {
-                                url = it1.result.toString()
-                                val mapProfilePic = HashMap<String, Any>()
-                                mapProfilePic["profilePic"] = url
-                                userReference!!.updateChildren(mapProfilePic)
-                                progressBar.hide()
-                            }
+                    val addOnCompleteListener = fileRef.downloadUrl.addOnCompleteListener { it1: Task<Uri> ->
+                        if (it1.isSuccessful)
+                        {
+                            url = it1.result.toString()
+                            val mapProfilePic = HashMap<String, Any>()
+                            mapProfilePic["profilePic"] = url
+                            userReference!!.updateChildren(mapProfilePic)
+                            progressBar.hide()
                         }
+                    } // End Download Url On Complete Listener
 
-
-
-                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                        val userRef =
-                            FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                        userRef.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(p0: DataSnapshot) {
-                                if (p0.exists()) {
+                    val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                    val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
+                    userRef.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(p0: DataSnapshot) {
+                            if (p0.exists()) {
                                     val user = p0.getValue<User>(User::class.java)
 
                                     Glide.with(this@ProfileActivity)
                                         .load(user!!.getProfilePic())
-                                        .placeholder(R.drawable.ic_launcher_background)
+                                        .placeholder(R.drawable.default_profile_pic)
                                         .transform(CircleCrop())
                                         .into(ivProfilePic)
                                 }
-
-                            }
-
-                            override fun onCancelled(p0: DatabaseError) {
-                                TODO("Not yet implemented")
-                            }
-                        })
-                    }
-                }
-        }
-    }
-}
+                        } // End On Data Change Function
+                        override fun onCancelled(p0: DatabaseError) {
+                            TODO("Not yet implemented")
+                        } // End On Data Cancel Function
+                    }) // End Add Value Event Listener
+                } // End If Upload Tassk is Successful
+            } // End Upload Task Complete Listener
+        } // End If Image Uri is Not Equals To Null
+    } // End Upload Image Database Function
+} // End Activity Class
 /*
 val url = if (photoUrl != null) "$photoUrl?w=360" else null //1
 Glide.with(itemView)  //2
