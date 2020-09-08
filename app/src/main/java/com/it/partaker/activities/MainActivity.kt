@@ -1,7 +1,8 @@
-package com.it.partaker
+package com.it.partaker.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.it.partaker.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.it.partaker
+package com.it.partaker.activities
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -6,13 +6,10 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -20,8 +17,8 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
-import com.squareup.picasso.Picasso
+import com.it.partaker.R
+import com.it.partaker.classes.User
 import kotlinx.android.synthetic.main.activity_profile.*
 
 
@@ -50,13 +47,13 @@ class ProfileActivity : AppCompatActivity() {
                     val user = p0.getValue<User>(User::class.java)
 
                     tvProfileFullNameFB.text = user!!.getFullName()
-                    tvProfilePhoneNumberFB.text = user!!.getPhoneNumber()
-                    tvProfileCityFB.text = user!!.getCity()
-                    tvProfileBloodGroupFB.text = user!!.getBloodGroup()
-                    tvProfileGenderFB.text = user!!.getGender()
+                    tvProfilePhoneNumberFB.text = user.getPhoneNumber()
+                    tvProfileCityFB.text = user.getCity()
+                    tvProfileBloodGroupFB.text = user.getBloodGroup()
+                    tvProfileGenderFB.text = user.getGender()
 
                     Glide.with(this@ProfileActivity)
-                        .load(user!!.getProfilePic())
+                        .load(user.getProfilePic())
                         .placeholder(R.drawable.default_profile_pic)
                         .transform(CircleCrop())
                         .into(ivProfilePic)
@@ -93,7 +90,9 @@ class ProfileActivity : AppCompatActivity() {
     }
     private fun uploadImageDatabase() {
         val progressBar = ProgressDialog(this)
-        progressBar.setMessage("Image is Uploading. Please Wait")
+        progressBar.setTitle("Upload Image")
+        progressBar.setCanceledOnTouchOutside(false)
+        progressBar.setMessage("Image is Uploading. Please Wait A While")
         progressBar.show()
 
         if(imageUri!= null) {
@@ -106,14 +105,17 @@ class ProfileActivity : AppCompatActivity() {
                     var url = it.result.toString()
 
                     val addOnCompleteListener = fileRef.downloadUrl.addOnCompleteListener { it1: Task<Uri> ->
-                        if (it1.isSuccessful)
-                        {
+                        if (it1.isSuccessful) {
                             url = it1.result.toString()
                             val mapProfilePic = HashMap<String, Any>()
                             mapProfilePic["profilePic"] = url
                             userReference!!.updateChildren(mapProfilePic)
-                            progressBar.hide()
+                            progressBar.dismiss()
                         }
+                        else{
+                            Toast.makeText(this, "Error: "+ it.exception.toString(),Toast.LENGTH_LONG).show()
+                            progressBar.dismiss()
+                        } // End Else Upload Task Complete Listener
                     } // End Download Url On Complete Listener
 
                     val userId = FirebaseAuth.getInstance().currentUser!!.uid

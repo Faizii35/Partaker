@@ -1,4 +1,4 @@
-package com.it.partaker
+package com.it.partaker.classes
 
 class User (
     private var id : String = "", private var fullName : String = "",

@@ -1,4 +1,4 @@
-package com.it.partaker
+package com.it.partaker.activities
 
 import android.content.Intent
 import android.content.Intent.*
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.it.partaker.R
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
