@@ -15,7 +15,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="Confirm Password"
+        android:hint="@string/confirm_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
@@ -30,7 +30,7 @@
         android:layout_marginTop="56dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="Full Name"
+        android:hint="@string/full_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +43,8 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="textPersonName"
+        android:hint="@string/phone_number"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etFullName" />
@@ -57,7 +57,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="City"
+        android:hint="@string/city"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,8 +71,8 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCity" />
@@ -85,7 +85,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
@@ -99,7 +99,7 @@
         android:layout_marginStart="88dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="9dp"
-        android:text="Gender"
+        android:text="@string/gender"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rgGender"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +112,7 @@
         android:layout_marginStart="109dp"
         android:layout_marginTop="104dp"
         android:layout_marginEnd="110dp"
-        android:text="Register"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,14 +135,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Male"
+            android:text="@string/male"
             android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rbFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Female"
+            android:text="@string/female"
             android:textSize="12sp" />
     </RadioGroup>
 
@@ -152,7 +152,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Register As"
+        android:text="@string/register_as"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/rgRegisterAs"
         app:layout_constraintHorizontal_bias="0.811"
@@ -161,8 +161,8 @@
 
     <RadioGroup
         android:id="@+id/rgRegisterAs"
-        android:layout_width="150dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:orientation="horizontal"
         android:padding="2dp"
@@ -176,15 +176,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Donor"
+            android:text="@string/donor"
             android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/rbReceiver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2sp"
-            android:text="Receiver"
+            android:layout_marginStart="2sp"
+            android:text="@string/receiver"
             android:textSize="12sp" />
     </RadioGroup>
 
@@ -195,7 +195,7 @@
         android:layout_marginStart="174dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="179dp"
-        android:text="Alredy Have An Account?"
+        android:text="@string/alredy_have_an_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.577"
         app:layout_constraintStart_toStartOf="parent"
@@ -208,7 +208,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="91dp"
-        android:text="Sign In"
+        android:text="@string/sign_in"
         android:textColor="#1B6285"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.137"

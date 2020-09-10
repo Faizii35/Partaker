@@ -1,13 +1,18 @@
 package com.it.partaker.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.Intent.*
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.it.partaker.R
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,33 +32,66 @@ class LoginActivity : AppCompatActivity() {
             val email = etLoginEmail.text.toString().trim()
             val password = etLoginPassword.text.toString().trim()
 
-            if(email == "" || password == "")
-            {
-                Toast.makeText(this, "Please Fill Required Data",Toast.LENGTH_SHORT).show()
-            } // End If Check Validation
-            else
-            {
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        if (mAuth.currentUser!!.isEmailVerified) {
-                            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+            when {
+                TextUtils.isEmpty(email) -> Toast.makeText(this,"Email is Required", Toast.LENGTH_SHORT).show()
+                TextUtils.isEmpty(password) -> Toast.makeText(this,"Password is Required", Toast.LENGTH_SHORT).show()
 
-                            etLoginEmail.setText("")
-                            etLoginPassword.setText("")
+                else -> {
 
-                            val intent = Intent(this, ProfileActivity::class.java)
-                            intent.flags = FLAG_ACTIVITY_CLEAR_TOP
-                            startActivity(intent)
-                        }
+                    val progressDialog = ProgressDialog(this)
+                    progressDialog.setTitle("Login")
+                    progressDialog.setMessage("Please Wait! It May Take A While")
+                    progressDialog.setCanceledOnTouchOutside(false)
+                    progressDialog.show()
+
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            if (mAuth.currentUser!!.isEmailVerified) {
+                                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+
+                                etLoginEmail.setText("")
+                                etLoginPassword.setText("")
+
+                                progressDialog.dismiss()
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = FLAG_ACTIVITY_CLEAR_TOP
+                                startActivity(intent)
+                            }
+                            else {
+                                progressDialog.dismiss()
+                                Toast.makeText(this,"Please Verify Your Email First!", Toast.LENGTH_SHORT).show()
+                            } // End Else Is Verified Email
+                        } // End If SignIn
                         else {
-                            Toast.makeText(this,"Please Verify Your Email First!", Toast.LENGTH_SHORT).show()
-                        } // End Else Is Verified Email
-                    } // End If SignIn
-                    else {
-                        Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT).show()
-                    } // End Else SignIn
-                } // End SignIn Function
-            } // End Else Check Validation
+                            progressDialog.dismiss()
+                            Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT).show()
+                        } // End Else SignIn
+                    } // End SignIn Function
+                } // End Else Block
+            } //End When Block
         } // End Button Login Function
+
+        tvLoginForgotPassword.setOnClickListener {
+            loginLayout.visibility = View.GONE
+            fragmentForgotPassword.visibility = View.VISIBLE
+        }
+
+        btnResetPassword.setOnClickListener {
+
+
+            val recEmail =  etRecoveryEmail.text.toString().trim()
+
+            mAuth.sendPasswordResetEmail(recEmail).addOnCompleteListener {
+                if(it.isSuccessful) {
+                    Toast.makeText(this,"Password Reset Email Sent: $recEmail",Toast.LENGTH_LONG).show()
+
+                    fragmentForgotPassword.visibility = View.GONE
+                    loginLayout.visibility = View.VISIBLE
+                }
+                else {
+                    Toast.makeText(this,"Error: " + it.exception,Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     } // End OnCreate Function
 } // End Activity

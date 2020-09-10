@@ -6,19 +6,25 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.replace
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.it.partaker.R
 import com.it.partaker.classes.User
+import com.it.partaker.fragments.ChangePasswordFragment
 import kotlinx.android.synthetic.main.activity_profile.*
 
 
@@ -34,6 +40,9 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        //Load Change Password Fragment
+       // supportFragmentManager.beginTransaction().replace(R.id.fragment_container_view_tag,ChangePasswordFragment()).commit()
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userReference = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser?.uid.toString())
@@ -62,13 +71,47 @@ class ProfileActivity : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) { TODO("Not yet implemented") }
         })
 
-        // Sign Out Button Click
-        btnProfileSignOut.setOnClickListener {
-            mAuth?.signOut()
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
+        // Change Password Text Click
+        tvProfileChangePassword.setOnClickListener {
+            profileLayout.visibility = View.GONE
+            fragmentChangePassword.visibility = View.VISIBLE
         }
+
+
+        // Sign Out Button Click
+        btnProfileDelete.setOnClickListener {
+
+            AlertDialog.Builder(this).apply {
+                setTitle("Are you sure?")
+                setPositiveButton("Yes") { _, _ ->
+
+                    val user = FirebaseAuth.getInstance().currentUser!!
+
+                    user.delete()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(this@ProfileActivity,"Account Deleted", Toast.LENGTH_LONG).show()
+                            }
+                            else
+                            {
+                                Toast.makeText(this@ProfileActivity, "Error: ${task.exception}", Toast.LENGTH_SHORT).show()
+
+                            }
+                        }
+
+                    val intent = Intent(this@ProfileActivity, LoginActivity::class.java)
+                    intent.flags = FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+
+                }
+                setNegativeButton("Cancel") { _, _ ->
+                    Toast.makeText(this@ProfileActivity, "Process Cancelled", Toast.LENGTH_SHORT).show()
+
+                }
+            }.create().show()
+        }
+
+
         ivProfilePic.setOnClickListener {
             pickImage()
         }
@@ -136,29 +179,8 @@ class ProfileActivity : AppCompatActivity() {
                             TODO("Not yet implemented")
                         } // End On Data Cancel Function
                     }) // End Add Value Event Listener
-                } // End If Upload Tassk is Successful
+                } // End If Upload Task is Successful
             } // End Upload Task Complete Listener
         } // End If Image Uri is Not Equals To Null
     } // End Upload Image Database Function
 } // End Activity Class
-/*
-val url = if (photoUrl != null) "$photoUrl?w=360" else null //1
-Glide.with(itemView)  //2
-    .load(url) //3
-    .centerCrop() //4
-    .placeholder(R.drawable.ic_image_place_holder) //5
-    .error(R.drawable.ic_broken_image) //6
-    .fallback(R.drawable.ic_no_image) //7
-    .into(itemView.ivPhoto) //8
-
-
-     Glide.with(this) //1
-    .load(profilePicUrl)
-    .placeholder(R.drawable.ic_profile_placeholder)
-    .error(R.drawable.ic_profile_placeholder)
-    .skipMemoryCache(true) //2
-    .diskCacheStrategy(DiskCacheStrategy.NONE) //3
-    .transform(CircleCrop()) //4
-    .into(ivProfile)
-
-     */

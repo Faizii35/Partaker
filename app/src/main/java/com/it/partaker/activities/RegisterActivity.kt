@@ -1,5 +1,6 @@
 package com.it.partaker.activities
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.Intent.*
@@ -88,7 +89,6 @@ class RegisterActivity : AppCompatActivity() {
                                     val user = User(userID,fullName,phoneNumber,city,email,password,gender,registerAs,bloodGroup,profilePic)
                                     refUsers.setValue(user).addOnCompleteListener { it ->
                                         if (it.isSuccessful) {
-
                                             //Progress Dialog Dismiss
                                             progressDialog.dismiss()
 
@@ -102,8 +102,6 @@ class RegisterActivity : AppCompatActivity() {
                                                 intent.flags = FLAG_ACTIVITY_CLEAR_TOP
                                                 startActivity(intent)
                                             }
-
-
 
                                         } //End If Update Children
                                     } // End Update Children Function
