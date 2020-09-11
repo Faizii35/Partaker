@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.EditProfileFragment">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditProfileName"
+        style="@style/Theme.MaterialComponents.Light.DarkActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tilEditProfilePhoneNum"
+        android:layout_centerInParent="true"
+        app:errorEnabled="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditProfileName"
+            android:layout_width="match_parent"
+            android:textColor="@color/cardview_shadow_start_color"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:hint="Name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditProfilePhoneNum"
+        style="@style/Theme.MaterialComponents.Light.DarkActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:errorEnabled="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditProfilePhoneNum"
+            android:layout_width="match_parent"
+            android:textColor="@color/cardview_shadow_start_color"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:hint="Phone Number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditProfileCity"
+        style="@style/Theme.MaterialComponents.Light.DarkActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilEditProfilePhoneNum"
+        android:layout_centerInParent="true"
+        app:errorEnabled="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditProfileCity"
+            android:layout_width="match_parent"
+            android:textColor="@color/cardview_shadow_start_color"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:hint="City" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</RelativeLayout>
+</FrameLayout>
