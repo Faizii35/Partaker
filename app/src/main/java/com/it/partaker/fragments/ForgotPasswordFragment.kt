@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.it.partaker.R
 import com.it.partaker.activities.LoginActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 // TODO: Rename parameter arguments, choose names that match
