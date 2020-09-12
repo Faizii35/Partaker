@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,10 @@ import com.google.firebase.storage.StorageTask
 import com.it.partaker.R
 import com.it.partaker.activities.LoginActivity
 import com.it.partaker.classes.User
+import kotlinx.android.synthetic.main.fragment_change_password.*
+import kotlinx.android.synthetic.main.fragment_change_password.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,15 +93,63 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        //Change Password Text Click Listener
-        tvProfileChangePassword.setOnClickListener {
+        view.tvProfileChangePassword.setOnClickListener {
+           // childFragmentManager.beginTransaction().replace(R.id.nav_host_fragment,ChangePasswordFragment()).addToBackStack("").commit()
+
             profileLayout.visibility = View.GONE
             fragmentChangePassword.visibility = View.VISIBLE
         }
 
-        // Delete Account Button Click Listener
-        btnProfileDelete.setOnClickListener {
+        view.button.setOnClickListener {
+
+            val currentPass = view.etFPCurrentPassword.text.toString()
+            val newPass = view.etFPNewPassword.text.toString()
+            val confirmNewPass = view.etFPConfirmNewPassword.text.toString()
+
+            when{
+                TextUtils.isEmpty(currentPass) -> Toast.makeText(context,"Current Password is Required", Toast.LENGTH_SHORT).show()
+                TextUtils.isEmpty(newPass) -> Toast.makeText(context,"Password is Required", Toast.LENGTH_SHORT).show()
+                TextUtils.isEmpty(confirmNewPass) -> Toast.makeText(context,"Confirm Password is Required", Toast.LENGTH_SHORT).show()
+
+                currentPass == newPass -> Toast.makeText(context,"New & Current Password Shouldn't Be Same.", Toast.LENGTH_LONG).show()
+                confirmNewPass != newPass -> Toast.makeText(context,"New & Confirm Password Doesn't Match.", Toast.LENGTH_LONG).show()
+
+                else->{
+                    firebaseUser?.updatePassword(newPass)?.addOnCompleteListener {
+                        if(it.isSuccessful) {
+                            val user = HashMap<String, Any>()
+                            user["password"] = newPass
+
+                            userReference?.updateChildren(user)?.addOnCompleteListener {
+                                if(it.isSuccessful){
+                                    Toast.makeText(context,"Password Successfully Updated", Toast.LENGTH_SHORT).show()
+                                    profileLayout.visibility = View.VISIBLE
+                                    fragmentChangePassword.visibility = View.GONE
+                                }
+                                else
+                                {
+                                    Toast.makeText(context,"Error: " + it.exception.toString(), Toast.LENGTH_SHORT).show()
+                                    profileLayout.visibility = View.VISIBLE
+                                    fragmentChangePassword.visibility = View.GONE
+
+                                }
+                            }
+                        }
+                        else {
+                            Toast.makeText(context,"Password Didn't Updated: ${it.exception.toString()}", Toast.LENGTH_SHORT).show()
+                            profileLayout.visibility = View.VISIBLE
+                            fragmentChangePassword.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+
+        }
+
+        view.btnProfileDelete.setOnClickListener {
             context?.let { it1 ->
                 AlertDialog.Builder(it1).apply {
                     setTitle("Are you sure?")
@@ -121,12 +173,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        ivProfilePic.setOnClickListener {
+        view.ivProfilePic.setOnClickListener {
             pickImage()
         }
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        return view
     }
 
     companion object {
@@ -192,6 +243,7 @@ class ProfileFragment : Fragment() {
                             progressBar.dismiss()
                         } // End Else Upload Task Complete Listener
                     } // End Download Url On Complete Listener
+
                     val userId = FirebaseAuth.getInstance().currentUser!!.uid
                     val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
                     userRef.addValueEventListener(object : ValueEventListener {

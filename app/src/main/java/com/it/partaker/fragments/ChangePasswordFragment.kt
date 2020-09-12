@@ -1,11 +1,26 @@
 package com.it.partaker.fragments
 
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.replace
+import androidx.navigation.ui.AppBarConfiguration
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.EmailAuthProvider.getCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.storage.StorageReference
 import com.it.partaker.R
+import kotlinx.android.synthetic.main.fragment_change_password.*
+import kotlinx.android.synthetic.main.fragment_change_password.view.*
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +37,13 @@ class ChangePasswordFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+
+    private var mAuth: FirebaseAuth? = null
+    private var userReference : DatabaseReference? = null
+    private var storageRef: StorageReference? = null
+    private var firebaseUser : FirebaseUser? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,7 +57,9 @@ class ChangePasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_change_password, container, false)
+        val view =  inflater.inflate(R.layout.fragment_change_password, container, false)
+
+        return view
     }
 
     companion object {
