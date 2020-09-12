@@ -1,32 +1,31 @@
 package com.it.partaker.activities
 
-import android.app.Activity
-import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
 import com.it.partaker.R
+import com.it.partaker.R.id.nav_host_fragment
 import com.it.partaker.classes.User
+import com.it.partaker.fragments.HomeFragment
+import com.it.partaker.fragments.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +36,9 @@ class MainActivity : AppCompatActivity() {
     private var firebaseUser : FirebaseUser? = null
     private var imageUri : Uri? = null
     private val RequestCode = 438
+
+    var selectedFragment : Fragment? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,28 +54,31 @@ class MainActivity : AppCompatActivity() {
 //        spinBlood.adapter = ArrayAdp
 
 
+
         //Data Retrieval From Firebase in Profile Fragment
-//        userReference!!.addValueEventListener(object: ValueEventListener {
-//            override fun onDataChange(p0: DataSnapshot) {
-//                if (p0.exists()){
-//                    val user = p0.getValue<User>(User::class.java)
-//
-//                    tvProfileFullNameFB.text = user!!.getFullName()
-//                    tvProfilePhoneNumberFB.text = user.getPhoneNumber()
-//                    tvProfileCityFB.text = user.getCity()
-//                    tvProfileBloodGroupFB.text = user.getBloodGroup()
-//                    tvProfileGenderFB.text = user.getGender()
-//                    Glide.with(this@MainActivity)
-//                        .load(user.getProfilePic())
-//                        .placeholder(R.drawable.default_profile_pic)
-//                        .transform(CircleCrop())
-//                        .into(ivProfilePic)
-//                }
-//            }
-//            override fun onCancelled(p0: DatabaseError) {
-//                Toast.makeText(this@MainActivity,"Value Event Listener Failed: ", Toast.LENGTH_LONG).show()
-//            }
-//        })
+        userReference!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()) {
+                    val user = p0.getValue<User>(User::class.java)
+
+                    tvMainActivityNavHeaderName.text = user!!.getFullName()
+                    tvMainActivityNavHeaderEmail.text = user.getEmail()
+                    Glide.with(this@MainActivity)
+                        .load(user.getProfilePic())
+                        .placeholder(R.drawable.default_profile_pic)
+                        .transform(CircleCrop())
+                        .into(ivMainActivityNavHeaderProfile)
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Value Event Listener Failed: ",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
 
 //         //Change Password Text Click Listener
 //        tvProfileChangePassword.setOnClickListener {
@@ -111,7 +116,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         //Drawer Related Code of Main Activity Lies Below
         showEmployeeNavigationDrawer()
 
@@ -123,41 +127,60 @@ class MainActivity : AppCompatActivity() {
 //                        loadFragment(HomeFragment())
 //                        closeDrawer()
 //                    } else if (user?.token != null && user?.role == 0) {
-                        toolbar.title = "Donor"
-//                        loadFragment(ParentHomeFragment())
-                        closeDrawer()
+                    toolbar.title = "Donor"
+                    supportFragmentManager.beginTransaction().replace(nav_host_fragment,HomeFragment()).commit()
+                    closeDrawer()
                     true
                 }
                 R.id.nav_profile -> {
+                    selectedFragment = ProfileFragment()
 //                    loadFragment(ProfileFragment())
+                    toolbar.title = "Profile"
                     closeDrawer()
                     Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_myDonations -> {
 //                    loadFragment(CompletedCampaignsFragment())
+                    toolbar.title = "My Donations"
                     closeDrawer()
                     Toast.makeText(this, "My Donations", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_aboutApp -> {
-//                    loadFragment(ActiveCampaignsFragment())
+                    toolbar.title = "About App"
                     closeDrawer()
                     Toast.makeText(this, "About App", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_reviewApp -> {
-//                    loadFragment(UpcomingCampaignsFragment())
+                    toolbar.title = "Review App"
+
+                        val uri = Uri.parse("market://details?id=$packageName")
+                        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+                        // To count with Play market backstack, After pressing back button,
+                        // to taken back to our application, we need to add following flags to intent.
+                        goToMarket.addFlags(
+                            Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+                        try {
+                            startActivity(goToMarket)
+                        } catch (e: ActivityNotFoundException) {
+                            startActivity(
+                                Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
+                        }
                     closeDrawer()
                     Toast.makeText(this, "Review App", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_shareApp -> {
-//                    val shareIntent = Intent()
-//                    shareIntent.action = Intent.ACTION_SEND
-//                    shareIntent.type = "text/plain"
-//                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Poliofy")
-//                    startActivity(Intent.createChooser(shareIntent, null))
+                    val shareIntent = Intent()
+                    shareIntent.action = Intent.ACTION_SEND
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Partaker")
+                    startActivity(Intent.createChooser(shareIntent, null))
+                    toolbar.title = "Share App"
                     closeDrawer()
                     Toast.makeText(this, "Share App", Toast.LENGTH_SHORT).show()
                     true
@@ -166,22 +189,33 @@ class MainActivity : AppCompatActivity() {
                     AlertDialog.Builder(this).apply {
                         setTitle("Are you sure?")
                         setPositiveButton("Yes") { _, _ ->
-                                FirebaseAuth.getInstance().signOut()
+                            FirebaseAuth.getInstance().signOut()
+                            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intent)
                             Toast.makeText(this@MainActivity, "Logout", Toast.LENGTH_SHORT).show()
                         }
                         setNegativeButton("Cancel") { _, _ ->
-                            Toast.makeText(this@MainActivity, "Process Cancelled", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Process Cancelled",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                         }
                     }.create().show()
                     closeDrawer()
                     true
                 }
+
                 else -> {
                     Toast.makeText(this, "Item Not Selected", Toast.LENGTH_SHORT).show()
                     false
                 }
             }
+        }
+        if(selectedFragment!=null){
+            supportFragmentManager.beginTransaction().replace(nav_host_fragment,selectedFragment!!).commit()
         }
     }
 
@@ -251,6 +285,13 @@ class MainActivity : AppCompatActivity() {
 //    } // End Upload Image Database Function
 
 
+
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(nav_host_fragment, fragment)
+            .addToBackStack("")
+            .commit()
+    }
 
     //Drawer Related Code of Main Activity Lies Below
     private fun showEmployeeNavigationDrawer() {
