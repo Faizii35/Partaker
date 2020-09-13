@@ -22,10 +22,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.it.partaker.R
+import com.it.partaker.activities.ChangePasswordActivity
+import com.it.partaker.activities.EditProfileActivity
 import com.it.partaker.activities.LoginActivity
+import com.it.partaker.activities.MainActivity
 import com.it.partaker.classes.User
-import kotlinx.android.synthetic.main.fragment_change_password.*
-import kotlinx.android.synthetic.main.fragment_change_password.view.*
+import kotlinx.android.synthetic.main.activity_change_password.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -97,57 +99,11 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         view.tvProfileChangePassword.setOnClickListener {
-           // childFragmentManager.beginTransaction().replace(R.id.nav_host_fragment,ChangePasswordFragment()).addToBackStack("").commit()
-
-            profileLayout.visibility = View.GONE
-            fragmentChangePassword.visibility = View.VISIBLE
+            val intent = Intent(context, ChangePasswordActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
 
-        view.button.setOnClickListener {
-
-            val currentPass = view.etFPCurrentPassword.text.toString()
-            val newPass = view.etFPNewPassword.text.toString()
-            val confirmNewPass = view.etFPConfirmNewPassword.text.toString()
-
-            when{
-                TextUtils.isEmpty(currentPass) -> Toast.makeText(context,"Current Password is Required", Toast.LENGTH_SHORT).show()
-                TextUtils.isEmpty(newPass) -> Toast.makeText(context,"Password is Required", Toast.LENGTH_SHORT).show()
-                TextUtils.isEmpty(confirmNewPass) -> Toast.makeText(context,"Confirm Password is Required", Toast.LENGTH_SHORT).show()
-
-                currentPass == newPass -> Toast.makeText(context,"New & Current Password Shouldn't Be Same.", Toast.LENGTH_LONG).show()
-                confirmNewPass != newPass -> Toast.makeText(context,"New & Confirm Password Doesn't Match.", Toast.LENGTH_LONG).show()
-
-                else->{
-                    firebaseUser?.updatePassword(newPass)?.addOnCompleteListener {
-                        if(it.isSuccessful) {
-                            val user = HashMap<String, Any>()
-                            user["password"] = newPass
-
-                            userReference?.updateChildren(user)?.addOnCompleteListener {
-                                if(it.isSuccessful){
-                                    Toast.makeText(context,"Password Successfully Updated", Toast.LENGTH_SHORT).show()
-                                    profileLayout.visibility = View.VISIBLE
-                                    fragmentChangePassword.visibility = View.GONE
-                                }
-                                else
-                                {
-                                    Toast.makeText(context,"Error: " + it.exception.toString(), Toast.LENGTH_SHORT).show()
-                                    profileLayout.visibility = View.VISIBLE
-                                    fragmentChangePassword.visibility = View.GONE
-
-                                }
-                            }
-                        }
-                        else {
-                            Toast.makeText(context,"Password Didn't Updated: ${it.exception.toString()}", Toast.LENGTH_SHORT).show()
-                            profileLayout.visibility = View.VISIBLE
-                            fragmentChangePassword.visibility = View.GONE
-                        }
-                    }
-                }
-            }
-
-        }
 
         view.btnProfileDelete.setOnClickListener {
             context?.let { it1 ->
@@ -155,16 +111,23 @@ class ProfileFragment : Fragment() {
                     setTitle("Are you sure?")
                     setPositiveButton("Yes") { _, _ ->
                         val user = FirebaseAuth.getInstance().currentUser!!
-                        user.delete().addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(context,"Account Deleted", Toast.LENGTH_LONG).show()
-                            } else {
-                                Toast.makeText(context, "Error: ${task.exception}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        val intent = Intent(context, LoginActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        startActivity(intent)
+                       userReference?.removeValue()?.addOnCompleteListener {
+                           if (it.isSuccessful){
+                               user.delete().addOnCompleteListener { task ->
+                                   if (task.isSuccessful) {
+                                       Toast.makeText(context,"Account Deleted", Toast.LENGTH_LONG).show()
+                                       val intent = Intent(context, LoginActivity::class.java)
+                                       intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                       startActivity(intent)
+                                   } else {
+                                       Toast.makeText(context, "Error: ${task.exception}", Toast.LENGTH_SHORT).show()
+                                   }
+                               }
+                           }
+                           else{
+                               Toast.makeText(context,"User Deletion Process Doesn't Succeeded", Toast.LENGTH_LONG).show()
+                           }
+                       }
                     }
                     setNegativeButton("Cancel") { _, _ ->
                         Toast.makeText(context, "Process Cancelled", Toast.LENGTH_SHORT).show()
@@ -175,6 +138,11 @@ class ProfileFragment : Fragment() {
 
         view.ivProfilePic.setOnClickListener {
             pickImage()
+        }
+        view.btnProfileEditProfile.setOnClickListener {
+            val intent = Intent(context, EditProfileActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
 
         return view

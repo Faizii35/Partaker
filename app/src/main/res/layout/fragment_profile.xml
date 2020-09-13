@@ -11,32 +11,39 @@
         android:layout_height="match_parent"
         android:background="#FC507AC6">
 
-        <include
-            android:id="@+id/fragmentChangePassword"
-            layout="@layout/fragment_change_password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/profileLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FC507AC6">
+            android:background="#BA7CBDB0">
 
             <Button
                 android:id="@+id/btnProfileDelete"
-                android:padding="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="159dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="139dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginEnd="164dp"
-                android:background="#8EA1AA"
+                android:background="@color/colorAccent"
+                android:padding="5dp"
                 android:text="@string/delete_account"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.45"
+                app:layout_constraintHorizontal_bias="0.205"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvProfileChangePassword" />
+
+            <Button
+                android:id="@+id/btnProfileEditProfile"
+                android:layout_width="106dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="164dp"
+                android:background="@color/colorAccent"
+                android:padding="5dp"
+                android:text="Edit Profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvProfileChangePassword" />
 
@@ -45,7 +52,7 @@
                 android:layout_width="107dp"
                 android:layout_height="108dp"
                 android:layout_marginStart="80dp"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="55dp"
                 android:layout_marginEnd="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
@@ -58,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
@@ -108,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="87dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginEnd="79dp"
                 android:text="@string/name"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,6 +180,7 @@
                 android:background="#00554EC1"
                 android:text="@string/change_password"
                 android:textColor="#243FCF"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.553"
                 app:layout_constraintStart_toStartOf="parent"

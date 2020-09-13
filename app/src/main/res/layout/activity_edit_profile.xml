@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.EditProfileFragment">
+    tools:context=".activities.EditProfileActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,20 +80,6 @@
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spnEditProfileBloodGroup"
-            android:background="@color/colorAccent"
-            android:layout_width="169dp"
-            android:layout_height="39dp"
-            android:layout_below="@+id/tilEditProfileCity"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:tooltipText="Example: A+">
-
-        </androidx.appcompat.widget.AppCompatSpinner>
-
         <Button
             android:id="@+id/btnEditProfileConfirm"
             android:layout_width="wrap_content"
@@ -105,6 +91,38 @@
             android:textSize="14sp"
             android:layout_marginTop="70dp"
             android:text="Confirm" />
+
+
+        <TextView
+        android:id="@+id/tvEditProfileBloodGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Blood Group: "
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_below="@id/tilEditProfileCity"/>
+
+        <TextView
+            android:id="@+id/tvEditProfileBloodGroupFB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blood Group"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tilEditProfileCity">
+
+        </TextView>
+        <Spinner
+            android:id="@+id/spnEditProfileBloodGroup"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/tvEditProfileBloodGroupFB"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp" />
 
     </RelativeLayout>
 </FrameLayout>
