@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.it.partaker.R
+import com.it.partaker.adapter.DonorAdapter
+import com.it.partaker.classes.Donation
+import kotlinx.android.synthetic.main.fragment_home.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +43,21 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val manager = LinearLayoutManager(requireContext())
+        rvHFDonor.layoutManager = manager
+        val adapter = DonorAdapter()
+        rvHFDonor.adapter = adapter
+
+        val donationList : List<Donation>? = null
+        var recyclerViewDonationPost: RecyclerView
+        recyclerViewDonationPost = view.findViewById(R.id.rvHFDonor)
+        recyclerViewDonationPost.setHasFixedSize(true)
+
+        
+
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

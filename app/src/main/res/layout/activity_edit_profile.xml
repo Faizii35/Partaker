@@ -36,8 +36,7 @@
                 android:id="@+id/etEditProfileName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
-                android:textColor="@color/cardview_shadow_start_color"
+                android:textColor="@color/common_google_signin_btn_text_light"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,8 +55,7 @@
                 android:id="@+id/etEditProfilePhoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Phone Number"
-                android:textColor="@color/cardview_shadow_start_color"
+                android:textColor="@color/common_google_signin_btn_text_light"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,8 +73,7 @@
                 android:id="@+id/etEditProfileCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="City"
-                android:textColor="@color/cardview_shadow_start_color"
+                android:textColor="@color/common_google_signin_btn_text_light"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,43 +83,45 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spnEditProfileBloodGroup"
             android:layout_centerHorizontal="true"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@color/cardview_light_background"
-            android:textSize="14sp"
             android:layout_marginTop="70dp"
-            android:text="Confirm" />
+            android:backgroundTint="@color/colorAccent"
+            android:text="Confirm"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="14sp" />
 
 
         <TextView
-        android:id="@+id/tvEditProfileBloodGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Blood Group: "
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_below="@id/tilEditProfileCity"/>
+            android:id="@+id/tvEditProfileBloodGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tilEditProfileCity"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Blood Group: "
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvEditProfileBloodGroupFB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Blood Group"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginTop="20dp"
+            android:layout_below="@id/tilEditProfileCity"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/tilEditProfileCity">
+            android:layout_marginTop="20dp"
+            android:text="Blood Group"
+            android:textSize="16sp"
+            android:textStyle="bold">
 
         </TextView>
+
         <Spinner
             android:id="@+id/spnEditProfileBloodGroup"
             android:layout_width="130dp"
             android:layout_height="30dp"
             android:layout_below="@id/tvEditProfileBloodGroupFB"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp" />
+            android:layout_marginTop="25dp"
+            android:background="@color/colorAccent" />
 
     </RelativeLayout>
 </FrameLayout>

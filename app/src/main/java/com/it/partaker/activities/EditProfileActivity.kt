@@ -31,6 +31,22 @@ class EditProfileActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userReference = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser?.uid.toString())
 
+        userReference!!.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0.exists()){
+                    val user = p0.getValue<User>(User::class.java)
+
+                    etEditProfileName.setText(user!!.getFullName())
+                    etEditProfilePhoneNum.setText(user.getPhoneNumber())
+                    etEditProfileCity.setText(user.getCity())
+                    tvEditProfileBloodGroupFB.text = user.getBloodGroup()
+                }
+            }
+            override fun onCancelled(p0: DatabaseError) {
+                Toast.makeText(this@EditProfileActivity,"Value Event Listener Failed: ", Toast.LENGTH_LONG).show()
+            }
+        })
+
         val categories = ArrayList<String>()
         categories.add(0,"Not Known")
         categories.add(1,"A+")
@@ -42,48 +58,22 @@ class EditProfileActivity : AppCompatActivity() {
         categories.add(7,"O+")
         categories.add(8,"O-")
 
-
-        userReference!!.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                if (p0.exists()){
-                    val user = p0.getValue<User>(User::class.java)
-
-                    etEditProfileName.hint = user!!.getFullName()
-                    etEditProfilePhoneNum.hint = user.getPhoneNumber()
-                    etEditProfileCity.hint = user.getCity()
-                    tvEditProfileBloodGroupFB.text = user.getBloodGroup()
-                }
-            }
-            override fun onCancelled(p0: DatabaseError) {
-                Toast.makeText(this@EditProfileActivity,"Value Event Listener Failed: ", Toast.LENGTH_LONG).show()
-            }
-        })
-
-            var dataAdapter : ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item)
+            val dataAdapter : ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spnEditProfileBloodGroup.adapter = dataAdapter
 
         spnEditProfileBloodGroup.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // TO DO Auto Method
+                bloodGroup = "Not Known"
             Toast.makeText(this@EditProfileActivity,"None Selected",Toast.LENGTH_LONG).show()
             }
-
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
                 if(parent?.getItemAtPosition(position).toString().equals("Not Known")){
                     bloodGroup = "Not Known"
                 }
                 else {
-                    var item  = parent?.getItemAtPosition(position).toString()
-
-                    if(item == "1"){bloodGroup = "A+" }
-                    else if(item == "2"){bloodGroup = "A-"}
-                    else if(item == "3"){bloodGroup = "B+"}
-                    else if(item == "4"){bloodGroup = "B-"}
-                    else if(item == "5"){bloodGroup = "AB+"}
-                    else if(item == "6"){bloodGroup = "AB-"}
-                    else if(item == "7"){bloodGroup = "O+"}
-                    else {bloodGroup = "O-"}
+                    val item  = parent?.getItemAtPosition(position).toString()
+                    bloodGroup = item
                 }
         }
         btnEditProfileConfirm.setOnClickListener {
@@ -107,6 +97,5 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
         } // End Confirm Button Click Listener
-
     }
 }

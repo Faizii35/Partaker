@@ -26,6 +26,7 @@ import com.it.partaker.activities.ChangePasswordActivity
 import com.it.partaker.activities.EditProfileActivity
 import com.it.partaker.activities.LoginActivity
 import com.it.partaker.activities.MainActivity
+import com.it.partaker.classes.Donation
 import com.it.partaker.classes.User
 import kotlinx.android.synthetic.main.activity_change_password.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
