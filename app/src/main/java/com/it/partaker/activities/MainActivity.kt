@@ -37,16 +37,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportFragmentManager.beginTransaction().replace(nav_host_fragment,HomeFragment()).commit()
+
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userReference = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser?.uid.toString())
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
-
-//        val spinBlood = findViewById<Spinner>(R.id.spnEditProfileBloodGroup)
-//        val bloodGroup = arrayOf("Not Known","A+","A-","B+","B-","AB+","AB-","O+","O-")
-//        val ArrayAdp = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_dropdown_item, bloodGroup)
-//        spinBlood.adapter = ArrayAdp
-
-
 
         //Data Retrieval From Firebase in Profile Fragment
         userReference!!.addValueEventListener(object : ValueEventListener {
@@ -106,13 +101,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_aboutApp -> {
-                    toolbar.title = "About App"
                     closeDrawer()
-                    Toast.makeText(this, "About App", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_reviewApp -> {
-                    toolbar.title = "Review App"
 
                         val uri = Uri.parse("market://details?id=$packageName")
                         val goToMarket = Intent(Intent.ACTION_VIEW, uri)
@@ -129,7 +121,6 @@ class MainActivity : AppCompatActivity() {
                                     Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
                         }
                     closeDrawer()
-                    Toast.makeText(this, "Review App", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_shareApp -> {
@@ -138,9 +129,7 @@ class MainActivity : AppCompatActivity() {
                     shareIntent.type = "text/plain"
                     shareIntent.putExtra(Intent.EXTRA_TEXT, "Partaker")
                     startActivity(Intent.createChooser(shareIntent, null))
-                    toolbar.title = "Share App"
                     closeDrawer()
-                    Toast.makeText(this, "Share App", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_logout -> {

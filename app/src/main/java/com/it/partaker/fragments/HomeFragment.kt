@@ -1,5 +1,6 @@
 package com.it.partaker.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,9 +9,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.it.partaker.R
+import com.it.partaker.activities.AddPostActivity
+import com.it.partaker.activities.LoginActivity
 import com.it.partaker.adapter.DonorAdapter
 import com.it.partaker.classes.Donation
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,19 +43,27 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        view.fa_btn_HF_add_donation.setOnClickListener {
+            val intent = Intent(context, AddPostActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val manager = LinearLayoutManager(requireContext())
-        rvHFDonor.layoutManager = manager
-        val adapter = DonorAdapter()
-        rvHFDonor.adapter = adapter
+//        val manager = LinearLayoutManager(requireContext())
+//        rvHFDonor.layoutManager = manager
+//        val adapter = DonorAdapter()
+//        rvHFDonor.adapter = adapter
 
         val donationList : List<Donation>? = null
-        var recyclerViewDonationPost: RecyclerView
+        val recyclerViewDonationPost: RecyclerView
         recyclerViewDonationPost = view.findViewById(R.id.rvHFDonor)
         recyclerViewDonationPost.setHasFixedSize(true)
 

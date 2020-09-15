@@ -213,9 +213,7 @@ class ProfileFragment : Fragment() {
                         } // End Else Upload Task Complete Listener
                     } // End Download Url On Complete Listener
 
-                    val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                    val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
-                    userRef.addValueEventListener(object : ValueEventListener {
+                    userReference!!.addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(p0: DataSnapshot) {
                             if (p0.exists()) {
                                 val user = p0.getValue<User>(User::class.java)
