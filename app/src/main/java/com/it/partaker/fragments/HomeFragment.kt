@@ -8,6 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.it.partaker.R
 import com.it.partaker.activities.AddPostActivity
 import com.it.partaker.activities.LoginActivity
@@ -31,6 +36,9 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+
+    private lateinit var adapter : DonorAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,12 +54,6 @@ class HomeFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
-        view.fa_btn_HF_add_donation.setOnClickListener {
-            val intent = Intent(context, AddPostActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-        }
         return view
     }
 
@@ -62,31 +64,73 @@ class HomeFragment : Fragment() {
 //        val adapter = DonorAdapter()
 //        rvHFDonor.adapter = adapter
 
-        val donationList : List<Donation>? = null
-        val recyclerViewDonationPost: RecyclerView
-        recyclerViewDonationPost = view.findViewById(R.id.rvHFDonor)
-        recyclerViewDonationPost.setHasFixedSize(true)
+        val donRef = FirebaseDatabase.getInstance().reference.child("donations")
+
+
+        val manager = LinearLayoutManager(activity)
+        rvHFDonor.layoutManager = manager
+
+        adapter = DonorAdapter(requireContext())
+        rvHFDonor.adapter = adapter
+
+        donRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val donationList = mutableListOf<Donation>()
+                    for(data in snapshot.children)
+                    {
+                        val donation = data.getValue(Donation::class.java)
+                        donation?.let {
+                            donationList.add(it)
+                        }
+                    }
+                    adapter.setDonations(donationList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+//        view.fa_btn_HF_add_donation.setOnClickListener {
+//            val intent = Intent(context, AddPostActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+//            startActivity(intent)
+//        }
+//        val donationList : List<Donation>? = null
+//        val recyclerViewDonationPost: RecyclerView
+//        recyclerViewDonationPost = view.findViewById(R.id.rvHFDonor)
+//        recyclerViewDonationPost.setHasFixedSize(true)
 
         
 
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+
+    fun getDonation(){
+//        donRef.addValueEventListener(object : ValueEventListener{
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if(snapshot.exists()){
+//                    val donationList = mutableListOf<Donation>()
+//                    for(data in snapshot.children)
+//                    {
+//                        val donation = data.getValue(Donation::class.java)
+//                        donation?.let {
+//                            donationList.add(it)
+//                        }
+//                    }
+//
+//                    adapter.setDonations(donationList)
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        })
     }
+
 }

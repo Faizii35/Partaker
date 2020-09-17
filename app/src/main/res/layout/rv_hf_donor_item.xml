@@ -2,42 +2,50 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/fragment_home"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivRVHFDonorItem"
-        android:layout_width="90dp"
-        android:layout_height="110dp"
-        android:layout_margin="5dp"
-        app:srcCompat="@drawable/default_profile_pic">
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/ivRVHFDonorItem"-->
+<!--        android:layout_width="90dp"-->
+<!--        android:layout_height="110dp"-->
+<!--        android:layout_margin="5dp"-->
+<!--        app:srcCompat="@drawable/default_profile_pic">-->
 
-    </androidx.appcompat.widget.AppCompatImageView>
+<!--    </androidx.appcompat.widget.AppCompatImageView>-->
 
 
-        <TextView
-            android:id="@+id/tvRVHFDonorName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/ivRVHFDonorItem"
-            android:layout_marginTop="15dp"
-            android:hint="Name For Request"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:singleLine="true"
-            />
+<!--        <TextView-->
+<!--            android:id="@+id/tvRVHFDonorName"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_toRightOf="@+id/ivRVHFDonorItem"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:hint="Name For Request"-->
+<!--            android:text="name"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:singleLine="true"-->
+<!--            />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvRVHFDonorDesc"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@+id/ivRVHFDonorItem"-->
+<!--        android:layout_below="@+id/tvRVHFDonorName"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:hint="Name For Request"-->
+<!--        android:textSize="18sp"-->
+<!--        android:singleLine="true"-->
+<!--        />-->
+
 
     <TextView
-        android:id="@+id/tvRVHFDonorDesc"
+        android:id="@+id/tvName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/ivRVHFDonorItem"
-        android:layout_below="@+id/tvRVHFDonorName"
-        android:layout_marginTop="15dp"
-        android:hint="Name For Request"
-        android:textSize="18sp"
-        android:singleLine="true"
-        />
-
-
+        android:layout_height="30dp"
+        android:text="name"/>
 
 </RelativeLayout>

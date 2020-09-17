@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager.beginTransaction().replace(nav_host_fragment,HomeFragment()).commit()
+//        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment,HomeFragment()).commit()
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
         userReference = FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser?.uid.toString())
@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_home -> {
+
 //                    if (user?.token != null && user?.role == 1) {
 //                        toolbar.title = "Worker"
 //                        loadFragment(HomeFragment())
